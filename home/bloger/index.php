@@ -90,7 +90,7 @@
             ?>
 
         <!--Card blog-->
-        <a href="blog.php?owner=<?php echo $row['blog_owner']; ?>&title=<?php echo $row['blog_title']; ?>&desc=<?php echo $row['blog_description']; ?>&text=<?php echo $row['blog_text']; ?>"
+        <a href="blog.php?id=<?php echo $row['idarticles']; ?>&owner=<?php echo $row['blog_owner']; ?>&title=<?php echo $row['blog_title']; ?>&desc=<?php echo $row['blog_description']; ?>"
             class="block shadow-md w-full p-5 space-y-2 hover:shadow-lg transition-all">
             <div class="flex gap-2 items-center">
                 <img src="../../user.png" class="size-8" alt="">

@@ -2,6 +2,21 @@
 <html lang="en">
 
 <head>
+    <?php
+    //GET the data blog from THE LINK
+    require "../../actions/utils/clean_inp.php";
+    require "../../actions/utils/Dbconnection.php";
+    $id = Clean_input($_GET['id']);
+    $owner = Clean_input($_GET['owner']);
+    $title = Clean_input($_GET['title']);
+    $desc = Clean_input($_GET['desc']);
+    //GET THE TEXT for the blog FROM THE DB 
+    $stm = $conn->prepare("SELECT blog_text from articles where idarticles=:id");
+    $stm->bindParam(":id", $id);
+    $stm->execute();
+    $data = $stm->fetch(PDO::FETCH_ASSOC);
+    $text = $data["blog_text"];
+    ?>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -72,22 +87,13 @@
         <div class="block shadow-md w-full p-5 space-y-2 hover:shadow-lg transition-all">
             <div class="flex gap-2 items-center">
                 <img src="../../user.png" class="size-8" alt="">
-                <span class="text-md font-serif text-black/80">Bloger name</span>
+                <span class="text-md font-serif text-black/80"><?php echo $owner; ?></span>
             </div>
             <hr class="w-full text-black/20" />
-            <h1 class="text-2xl p-2 font-bold">How I Made My Next.js App Load 10x Faster (And You Can Too)</h1>
-            <h1 class="text-sm text-black/50 px-2">Description</h1>
-            <p class="p-2">We’ve all been there — your Next.js app is working fine in development, but the moment it
-                hits
-                production, it feels like it’s running on a potato.
+            <h1 class="text-2xl p-2 font-bold"><?php echo $title; ?></h1>
+            <h1 class="text-sm text-black/50 px-2"><?php echo $desc; ?></h1>
+            <p class="p-2"> <?php echo $text; ?> </p>
 
-                Slow page loads, unresponsive UI, and Core Web Vitals screaming at you like an angry manager.
-
-                That was me a few months ago.
-                But after testing, breaking, and optimizing my app to the max, I finally cracked the code.
-                Here’s exactly how I made my Next.js app load faster and how you can too.
-
-            </p>
 
 
             <!--ADD COMMENTS-->
@@ -131,7 +137,7 @@
             </div>
         </div>
         <section id="prompt"
-            class="transition-all bg-black/80 absolute top-0 left-0 z-50 w-full h-svh hidden flex-col items-center justify-center ">
+            class="transition-all bg-black/80 fixed top-0 left-0 z-50 w-full h-svh hidden flex-col items-center justify-center ">
             <!--UPDATE THE COMMENTS FORM-->
             <form action="" method="post" class="flex flex-col p-4 w-[500px] gap-3 bg-white">
                 <div class="flex w-full justify-between">
