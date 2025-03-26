@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php
+//CALL THE GET BLOGS FILE
+require '../../actions/home/GetBlogs.php'
+    ?>
 
 <head>
     <meta charset="UTF-8" />

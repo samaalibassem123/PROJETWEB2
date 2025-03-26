@@ -2,6 +2,16 @@
 <html lang="en">
 
 <head>
+    <?php
+    //GET THE BLOGS FROM THE DB
+    session_start();
+    require '../../actions/utils/Dbconnection.php';
+    $username = $_SESSION["username"];
+    $stm = $conn->prepare("SELECT * FROM articles where blog_owner=:owner;");
+    $stm->bindParam(":owner", $username);
+    $stm->execute();
+    $data = $stm->fetchAll(PDO::FETCH_ASSOC);
+    ?>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -73,18 +83,27 @@
         </div>
     </header>
     <!--blogs-->
-    <main class="w-full h-svh p-24">
+    <main class="w-full h-svh p-24 py-10 space-y-5">
         <!--GET ALL THE BLOGS FROM THE DB-->
+        <?php
+        foreach ($data as $row) {
+            ?>
+
         <!--Card blog-->
-        <a href="blog.php" class="block shadow-md w-full p-5 space-y-2 hover:shadow-lg transition-all">
+        <a href="blog.php?owner=<?php echo $row['blog_owner']; ?>&title=<?php echo $row['blog_title']; ?>&desc=<?php echo $row['blog_description']; ?>&text=<?php echo $row['blog_text']; ?>"
+            class="block shadow-md w-full p-5 space-y-2 hover:shadow-lg transition-all">
             <div class="flex gap-2 items-center">
                 <img src="../../user.png" class="size-8" alt="">
-                <span class="text-md font-serif text-black/80">Bloger name</span>
+                <span class="text-md font-serif text-black/80"><?php echo $row['blog_owner']; ?></span>
             </div>
             <hr class="w-full text-black/20" />
-            <h1 class="text-2xl p-2 font-bold">How I Made My Next.js App Load 10x Faster (And You Can Too)</h1>
-            <h1 class="text-sm text-black/50 px-2">Description</h1>
+            <h1 class="text-2xl p-2 font-bold"><?php echo $row['blog_title']; ?></h1>
+            <h1 class="text-sm text-black/50 px-2"><?php echo $row['blog_description']; ?></h1>
         </a>
+
+        <?php
+        }
+        ?>
 
     </main>
 </body>

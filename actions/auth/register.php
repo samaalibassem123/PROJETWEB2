@@ -1,6 +1,6 @@
 <?php
-require_once "../utils/Dbconnection.php";
-require_once "../utils/clean_inp.php";
+require "../utils/Dbconnection.php";
+require "../utils/clean_inp.php";
 
 $username = Clean_input($_POST["username"]);
 $password = Clean_input($_POST["password"]);

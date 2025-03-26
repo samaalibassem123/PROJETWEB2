@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once "../utils/Dbconnection.php";
-require_once "../utils/clean_inp.php";
+require "../utils/Dbconnection.php";
+require "../utils/clean_inp.php";
 
 
 $username = Clean_input($_POST["username"]);
@@ -20,7 +20,7 @@ $stm->execute();
 
 $res = $stm->fetch(PDO::FETCH_ASSOC);
 
-if ($res["username"] != $username) {
+if (!$res["username"]) {
     //redirect the user to the login page if u d'ont found the username
     echo "<script>
                 alert('username Incorrect')
