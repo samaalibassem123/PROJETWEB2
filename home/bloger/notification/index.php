@@ -6,20 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        serif: ["Merriweather", "serif"],
-                        sans: ["Source Sans Pro", "sans-serif"],
-                    },
-                    colors: {
-                        primary: "#1a8917",
-                        dark: "#121212",
-                    },
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    serif: ["Merriweather", "serif"],
+                    sans: ["Source Sans Pro", "sans-serif"],
+                },
+                colors: {
+                    primary: "#1a8917",
+                    dark: "#121212",
                 },
             },
-        };
+        },
+    };
     </script>
     <title>Notifications</title>
 </head>
@@ -30,11 +30,11 @@
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center">
                 <h1 class="text-xl md:text-2xl font-serif">
-                    BloogersHub</span>
+                    BloogersHub
                 </h1>
             </div>
             <div class="space-x-20 font-sans flex">
-                <a href="../index.html" class="hover:border-b hover:text-black/80 flex gap-2 ">
+                <a href="../index.php" class="hover:border-b hover:text-black/80 flex gap-2 ">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="lucide lucide-book-open-text-icon lucide-book-open-text">
@@ -57,7 +57,14 @@
                         <path d="M4 2C2.8 3.7 2 5.7 2 8" />
                     </svg>
                     Notifications</a>
-               
+                <a href="../CreateBlog/index.php" class="hover:text-black/80 flex gap-2 items-end hover:border-b ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="23" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-square-pen">
+                        <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                        <path
+                            d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+                    </svg>Write</a>
             </div>
             <div class="flex items-center space-x-4">
                 <a href="/app/page.html"
@@ -76,7 +83,18 @@
                     <img src="../../../user.png" class="size-6" />
                     <span class="text-sm font-serif text-black/80">user name</span>
                 </div>
-                <span class="text-sm mx-3 bg-orange-300 p-1 px-2 rounded-lg text-white">pending</span>
+                <div class="flex gap-2">
+                    <!--CHANGE THE STATUS TO REJECTED COMMENTS FORM-->
+                    <form action="" class="px-2 flex items-center">
+                        <input type="submit" class="text-sm underline text-gray-400 cursor-pointer hover:text-red-400"
+                            value="Reject comment">
+                    </form>
+                    <!--CHANGE THE STATUS OF COMMENT TO ACCEPTED-->
+                    <form action="" class="px-2 flex items-center">
+                        <input type="submit" class="text-sm underline text-gray-400 cursor-pointer hover:text-green-400"
+                            value="Accept comment">
+                    </form>
+                </div>
             </div>
 
             <p class="p-2 text-sm">Thank you for these tips! I am eager to know which of them contributed the most to

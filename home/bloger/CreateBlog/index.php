@@ -6,22 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        serif: ["Merriweather", "serif"],
-                        sans: ["Source Sans Pro", "sans-serif"],
-                    },
-                    colors: {
-                        primary: "#1a8917",
-                        dark: "#121212",
-                    },
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    serif: ["Merriweather", "serif"],
+                    sans: ["Source Sans Pro", "sans-serif"],
+                },
+                colors: {
+                    primary: "#1a8917",
+                    dark: "#121212",
                 },
             },
-        };
+        },
+    };
     </script>
-    <title>Notifications</title>
+    <title>New Blog</title>
 </head>
 
 <body>
@@ -34,7 +34,7 @@
                 </h1>
             </div>
             <div class="space-x-20 font-sans flex">
-                <a href="../index.html" class="hover:border-b hover:text-black/80 flex gap-2 ">
+                <a href="../index.php" class="hover:border-b hover:text-black/80 flex gap-2 ">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="lucide lucide-book-open-text-icon lucide-book-open-text">
@@ -46,7 +46,7 @@
                         <path d="M6 12h2" />
                         <path d="M6 8h2" />
                     </svg>Blogs</a>
-                <a href="" class="hover:border-b hover:text-black/80 flex gap-2">
+                <a href="../notification/index.php" class="hover:border-b hover:text-black/80 flex gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="lucide lucide-bell-ring-icon lucide-bell-ring">
@@ -57,7 +57,7 @@
                         <path d="M4 2C2.8 3.7 2 5.7 2 8" />
                     </svg>
                     Notifications</a>
-                <a href="../CreateBlog/index.html" class="hover:text-black/80 flex gap-2 items-end hover:border-b ">
+                <a href="" class="hover:text-black/80 flex gap-2 items-end hover:border-b ">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="23" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="lucide lucide-square-pen">
@@ -72,37 +72,24 @@
             </div>
         </div>
     </header>
-    <!--GET ONLY THE COMMENTS THAT HAVE STAUS PENDING-->
-    <div class="flex flex-col gap-2" id="comments">
-        <!--Comment card-->
-        <div class="flex flex-col border-b border-gray-200 w-full p-2">
-            <h1 class="text-2xl m-2">
-                Blog Name or title</h1>
-            <div class="flex justify-between">
-                <div class="flex gap-2 items-center">
-                    <img src="../../../user.png" class="size-6" />
-                    <span class="text-sm font-serif text-black/80">user name</span>
-                </div>
-                <div class="flex gap-2">
-                    <!--CHANGE THE STATUS TO REJECTED COMMENTS FORM-->
-                    <form action="" class="px-2 flex items-center">
-                        <input type="submit" class="text-sm underline text-gray-400 cursor-pointer hover:text-red-400"
-                            value="Reject comment">
-                    </form>
-                    <!--CHANGE THE STATUS OF COMMENT TO ACCEPTED-->
-                    <form action="" class="px-2 flex items-center">
-                        <input type="submit" class="text-sm underline text-gray-400 cursor-pointer hover:text-green-400"
-                            value="Accept comment">
-                    </form>
-                </div>
-            </div>
+    <!--CREATE A BLOG-->
+    <main class="w-full h-svh p-24">
+        <form action="../../../actions/home/CreateBlog.php" class="flex flex-col gap-3" method="post">
 
-            <p class="p-2 text-sm">Thank you for these tips! I am eager to know which of them contributed the most to
-                your 3.9 ->0.9 seconds load time reduction!</p>
-        </div>
+            <input type="text" name="title" placeholder="Write the title" required
+                class="w-full p-2 focus:border-b outline-none text-3xl font-serif">
 
+            <input type="text" name="catg" placeholder="Categorie exmp : science , computer science, astronomy ..."
+                required class="w-full p-2 focus:border-b outline-none text-xl font-serif">
 
-    </div>
+            <input type="text" name="desc" placeholder="Description (optional)"
+                class="w-full px-3 focus:border-b outline-none text-lg text-black/50">
+
+            <textarea name="text" placeholder="Type your text blog Here !"
+                class="w-full p-3 focus:border-b outline-none text-lg " rows="10" required></textarea>
+            <input type="submit"
+                class="border p-2 px-5 w-[200px] cursor-pointer font-serif hover:bg-black/80 hover:text-white transition-all">
+        </form>
     </main>
 </body>
 

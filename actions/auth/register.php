@@ -4,26 +4,50 @@ require_once "../utils/clean_inp.php";
 
 $username = Clean_input($_POST["username"]);
 $password = Clean_input($_POST["password"]);
+$cpassword = Clean_input($_POST["Cpassword"]);
+$role = Clean_input($_GET["status"]);
 
-$sql = "SELECT count(*) as count from user where username=:username and password=:password;";
 
-//PREPARE THE STATEMENT
-
-$stm = $conn->prepare($sql);
-$stm->bindParam(":username", $username);
-$stm->bindParam(":password", $password);
-
-//excute the query
-$stm->execute();
-
-$res = $stm->fetch(PDO::FETCH_ASSOC);
-
-if ($res["count"] == 0) {
-    echo "<script>alert('Password or username Incorrect')</script>";
-    header("Location:app/auth/login/index.html");
+if ($password != $cpassword) {
+    //redirect the user to the previos page
+    echo "<script>
+                alert('Check confirm password they are not the same as password')
+                window.location.replace('http://localhost/app/auth/register/index.php?status={$role}');
+            </script>";
 } else {
-    echo "bien";
+
+    $sql = "INSERT INTO user (username, password, role) values(:name, :password, :role)";
+    //prepare the statement
+    $stm = $conn->prepare($sql);
+
+    //crypt the password
+    $password = password_hash($password, PASSWORD_DEFAULT);
+    //add variables to the statement
+    $stm->bindParam(":name", $username);
+    $stm->bindParam(":password", $password);
+    $stm->bindParam(":role", $role);
+
+
+    //execute the query
+    try {
+        $stm->execute();
+        echo "<script>
+                window.location.replace('http://localhost/app/auth/login/index.html');
+            </script>";
+    } catch (PDOException $e) {
+        echo "<script>
+                    alert('Username existed try another one')
+                    window.location.replace('http://localhost/app/auth/register/index.php?status={$role}');
+        </script> ";
+    }
+
+
+
+
 }
+
+
+
 
 
 ?>
