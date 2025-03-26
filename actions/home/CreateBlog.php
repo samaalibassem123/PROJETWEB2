@@ -11,7 +11,7 @@ $catg = Clean_input($_POST["catg"]);
 $username = $_SESSION["username"];
 
 
-$sql = "INSERT INTO (blog_title, blog_description, blog_text, blog_owner, catg_id) values (:title, :desc, :text, :owner, :categ);";
+$sql = "INSERT INTO articles (blog_title, blog_description, blog_text, blog_owner, catg_id) values (:title, :desc, :text, :owner, :categ);";
 
 //prepare the statement
 $stm = $conn->prepare($sql);
