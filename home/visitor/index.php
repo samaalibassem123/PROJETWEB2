@@ -91,12 +91,10 @@
     <nav class="px-20 py-5 border-b w-full h-fit">
         <!--GET ALL CATEGORYS-->
         <span class="text-lg mr-2 underline font-bold font-serif  text-nowrap">Categorys :</span>
-        <div class=" w-[90%] flex gap-2 items-center m-2 overflow-x-scroll" <?php
+        <div class=" w-[90%] flex gap-2 items-center  overflow-x-scroll"> <?php
         foreach ($Catgs as $cat) {
-            ?> <a href="../visitor/category/index.php?catname=<?php echo $cat["cat_name"] ?>"><span
-                class="border h-fit text-nowrap rounded-lg cursor-pointer bg-white hover:bg-black hover:text-white transition-all p-2"><?php
-                    echo $cat["cat_name"];
-                    ?></span></a>
+            ?> <a href="../visitor/category/index.php?catname=<?php echo $cat["cat_name"] ?>" class="my-2"><span
+                    class="border h-fit text-nowrap rounded-lg cursor-pointer bg-white hover:bg-black hover:text-white transition-all p-2"><?php echo $cat["cat_name"]; ?></span></a>
             <?php
         }
         ?>
