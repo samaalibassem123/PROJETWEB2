@@ -135,7 +135,8 @@
                         </div>
                         <div class="flex">
                             <!--DELETE COMMENTS FORM-->
-                            <form action="" method="post" class="px-2">
+                            <form action="../../actions/home/DeleteComment.php?id=<?php echo $Comment["idcomments"] ?>"
+                                method="post" class="px-2">
                                 <input type="submit"
                                     class="text-sm underline text-gray-400 cursor-pointer hover:text-red-400"
                                     value="Delete comment">
@@ -166,7 +167,8 @@
             <section id="prompt"
                 class="transition-all bg-black/80 fixed top-0 left-0 z-50 w-full h-svh hidden flex-col items-center justify-center ">
                 <!--UPDATE THE COMMENTS FORM-->
-                <form action="" method="post" class="flex flex-col p-4 w-[500px] gap-3 bg-white">
+                <form action="../../actions/home/UpdateComment.php?id=<?php echo $Comment["idcomments"] ?>"
+                    method="post" class="flex flex-col p-4 w-[500px] gap-3 bg-white">
                     <div class="flex w-full justify-between">
                         <legend class="font-bold ">Update the Comment</legend>
                         <span class="text-xl cursor-pointer" onclick="Closeprompt()">X</span>

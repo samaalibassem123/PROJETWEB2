@@ -108,12 +108,14 @@
                         if ($Comment["status"] == "pending") {
                             ?>
                     <!--CHANGE THE STATUS TO REJECTED COMMENTS FORM-->
-                    <form action="" class="px-2 flex items-center">
+                    <form action="../../../actions/home/RejectComment.php?id=<?php echo $Comment["idcomments"]; ?>"
+                        method="post" class="px-2 flex items-center">
                         <input type="submit" class="text-sm underline text-gray-400 cursor-pointer hover:text-red-400"
                             value="Reject comment">
                     </form>
                     <!--CHANGE THE STATUS OF COMMENT TO ACCEPTED-->
-                    <form action="" class="px-2 flex items-center">
+                    <form action="../../../actions/home/AcceptComment.php?id=<?php echo $Comment["idcomments"]; ?>"
+                        method="post" class="px-2 flex items-center">
                         <input type="submit" class="text-sm underline text-gray-400 cursor-pointer hover:text-green-400"
                             value="Accept comment">
                     </form>
@@ -134,7 +136,7 @@
 
             </div>
 
-            <p class="p-2 text-sm"><?php echo $Comment["contenu"]; ?></p>
+            <p class=" p-2 text-sm"><?php echo $Comment["contenu"]; ?></p>
         </div>
         <?php
             ;

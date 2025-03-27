@@ -161,7 +161,7 @@
             <?php
             foreach ($Comments as $Comment) {
                 //CHECK IF COMMENT IS NOT PENDING SHOW HIM
-                if ($Comment["status"] != "pending") {
+                if ($Comment["status"] != "pending" && $Comment["status"] != "rejected") {
                     ?>
             <div class="flex flex-col gap-2 h-fit" id="comments">
                 <div class="flex flex-col border-b border-gray-200 w-full p-2">

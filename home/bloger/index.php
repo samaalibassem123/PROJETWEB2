@@ -100,7 +100,7 @@
                 <br>
 
             </div>
-            <span class="text-sm text-gray-400">catg:</span>
+            <span class="text-sm text-gray-400">category:</span>
             <span
                 class="text-sm text-white font-serif bg-black p-1 px-2 rounded-lg "><?php echo $row["catg_id"]; ?></span>
             <hr class="w-full text-black/20 mt-2" />
