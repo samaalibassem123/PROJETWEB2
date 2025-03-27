@@ -122,7 +122,8 @@
             <span class="font-bold underline">Comments:</span>
 
             <!--Comment card-->
-            <?php foreach ($Comments as $Comment) { ?>
+            <?php foreach ($Comments as $Comment) {
+                ?>
             <div class="flex flex-col gap-2 h-fit" id="comments">
                 <div class="flex flex-col border-b border-gray-200 w-full p-2">
                     <div class="flex justify-between">
@@ -143,11 +144,24 @@
                             <button onclick="Showprompt()"
                                 class="text-sm underline text-gray-400 cursor-pointer hover:text-green-400">Edit
                                 comment</button>
+                            <?php
+
+                                if ($Comment["status"] == "pending") {
+                                    echo "<span class='text-sm mx-3 bg-orange-300 p-1 px-2 rounded-lg text-white'>pending</span>";
+                                } else if ($Comment["status"] == "accepted") {
+
+                                    echo "<span class='text-sm mx-3 bg-green-300 p-1 px-2 rounded-lg text-white'>Accepted</span>";
+                                } else if ($Comment["status"] == "rejected") {
+
+                                    echo "<span class='text-sm mx-3 bg-red-300 p-1 px-2 rounded-lg text-white'>Rejected</span>";
+                                }
+                                ?>
                         </div>
 
                     </div>
                     <p class="p-2 text-sm"><?php echo $Comment["contenu"]; ?></p>
                 </div>
+
             </div>
             <section id="prompt"
                 class="transition-all bg-black/80 fixed top-0 left-0 z-50 w-full h-svh hidden flex-col items-center justify-center ">
@@ -162,11 +176,13 @@
                     <input type="submit" value="Update" onclick="Closeprompt()"
                         class="border px-8 p-2 bg-black/80 text-white font-serif cursor-pointer hover:bg-black transition-all">
                 </form>
+                <!--CHECK THE STATUES-->
+
             </section>
             </div>
 
-            <?php ;
-            } ?>
+            <?php }
+            ?>
         </section>
 
 

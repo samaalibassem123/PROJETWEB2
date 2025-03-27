@@ -97,19 +97,19 @@ $Comments = $stm->fetchAll(PDO::FETCH_ASSOC);
                 </div>
 
                 <!--CHECK THE STATUES-->
-                <div class="flex flex-col items-center gap-2">
-                    <?php
-                        if ($Comment["status"] == "pending") {
-                            echo "<span class='text-sm mx-3 bg-orange-300 p-1 px-2 rounded-lg text-white'>pending</span>";
-                        } else if ($Comment["status"] == "accepted") {
 
-                            echo "<span class='text-sm mx-3 bg-green-300 p-1 px-2 rounded-lg text-white'>Accepted</span>";
-                        } else if ($Comment["status"] == "rejected") {
+                <?php
+                    if ($Comment["status"] == "pending") {
+                        echo "<span class='text-sm mx-3 bg-orange-300 p-1 px-2 rounded-lg text-white'>pending</span>";
+                    } else if ($Comment["status"] == "accepted") {
 
-                            echo "<span class='text-sm mx-3 bg-red-300 p-1 px-2 rounded-lg text-white'>Rejected</span>";
-                        }
-                        ?>
-                </div>
+                        echo "<span class='text-sm mx-3 bg-green-300 p-1 px-2 rounded-lg text-white'>Accepted</span>";
+                    } else if ($Comment["status"] == "rejected") {
+
+                        echo "<span class='text-sm mx-3 bg-red-300 p-1 px-2 rounded-lg text-white'>Rejected</span>";
+                    }
+                    ?>
+
             </div>
 
             <p class="p-2 text-sm"><?php echo $Comment["contenu"]; ?></p>

@@ -98,9 +98,16 @@
     <main class="w-full h-svh p-24">
         <!--Card blog-->
         <div class="block shadow-md w-full p-5 space-y-2 hover:shadow-lg transition-all">
-            <div class="flex gap-2 items-center">
-                <img src="../../user.png" class="size-8" alt="">
-                <span class="text-md font-serif text-black/80"><?php echo $owner; ?></span>
+            <div class="flex  items-center justify-between">
+                <div class="flex gap-2 items-center">
+                    <img src="../../user.png" class="size-8" alt="">
+                    <span class="text-md font-serif text-black/80"><?php echo $owner; ?></span>
+                </div>
+                <!--DELETE BLOG FORM-->
+                <form action="../../actions/home/DeleteBlog.php?id=<?php echo $id; ?>" method="post" class="px-2">
+                    <input type="submit" class="text-sm underline text-gray-400 cursor-pointer hover:text-red-400"
+                        value="Delete The Blog">
+                </form>
             </div>
             <hr class="w-full text-black/20" />
             <h1 class="text-2xl p-2 font-bold"><?php echo $title; ?></h1>
