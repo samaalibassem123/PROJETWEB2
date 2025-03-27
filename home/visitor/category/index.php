@@ -1,21 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-//GET the data blog from THE LINK
-require "../../../actions/utils/Dbconnection.php";
-$owner = $_SESSION["username"];
 
-//GET COMMENTS FROM DB
-$stm = $conn->prepare("SELECT * from comments c, articles a where c.id_art=a.idarticles and c.comment_owner=:owner order by c.date DESC");
-$stm->bindParam(":owner", $owner);
-$stm->execute();
-$Comments = $stm->fetchAll(PDO::FETCH_ASSOC);
-?>
 
 <head>
+    <?php
+    //GET THE BLOGS FROM THE DB
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    require "../../../actions/utils/Dbconnection.php";
+
+    $cat_name = $_GET["catname"];
+
+    $username = $_SESSION["username"];
+    $stm = $conn->prepare("SELECT * FROM articles where catg_id=:catname order by date_blog DESC");
+    $stm->bindParam(":catname", $cat_name);
+    $stm->execute();
+    $data = $stm->fetchAll(PDO::FETCH_ASSOC);
+
+
+    //GET CATERGORYS FROM THE DB
+    $stmCat = $conn->prepare("SELECT * from categories");
+    $stmCat->execute() or die("err" . $stm->errorInfo());
+    $Catgs = $stmCat->fetchAll(PDO::FETCH_ASSOC);
+
+    ?>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -35,7 +44,7 @@ $Comments = $stm->fetchAll(PDO::FETCH_ASSOC);
         },
     };
     </script>
-    <title>Notifications</title>
+    <title>Blogs</title>
 </head>
 
 <body>
@@ -44,7 +53,7 @@ $Comments = $stm->fetchAll(PDO::FETCH_ASSOC);
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center">
                 <h1 class="text-xl md:text-2xl font-serif">
-                    BloogersHub
+                    BloogersHub</span>
                 </h1>
             </div>
             <div class="space-x-20 font-sans flex">
@@ -60,7 +69,7 @@ $Comments = $stm->fetchAll(PDO::FETCH_ASSOC);
                         <path d="M6 12h2" />
                         <path d="M6 8h2" />
                     </svg>Blogs</a>
-                <a href="" class="hover:border-b hover:text-black/80 flex gap-2">
+                <a href="../notification/index.php" class="hover:border-b hover:text-black/80 flex gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="lucide lucide-bell-ring-icon lucide-bell-ring">
@@ -80,50 +89,50 @@ $Comments = $stm->fetchAll(PDO::FETCH_ASSOC);
                     value="Log-out" />
             </form>
         </div>
+        </div>
     </header>
-    <!--GET ONLY THE COMMENTS THAT HAVE STAUS PENDING-->
-    <div class="flex flex-col gap-2" id="comments">
+    <!--CATEGORYS-->
+    <nav class="px-20 py-5 border-b w-full h-fit">
+        <!--GET ALL CATEGORYS-->
+        <span class="text-lg mr-2 underline font-bold font-serif  text-nowrap">Categorys :</span>
+
+        <span class=" w-[90%] flex gap-2 items-center p-1  overflow-x-scroll">
+            <span class="border h-fit text-nowrap rounded-lg cursor-pointer  bg-black text-white transition-all p-2"><?php
+            echo $cat_name;
+            ?></span>
+        </span>
+
+    </nav>
+    <!--blogs-->
+    <main class="w-full py-5 p-24">
+        <!--GET ALL THE BLOGS FROM THE DB-->
+        <!--Card blog-->
         <?php
-        foreach ($Comments as $Comment) {
+        foreach ($data as $row) {
             ?>
 
-        <!--Comment card-->
-        <div class="flex flex-col border-b border-gray-200 w-full p-2">
-            <h1 class="text-2xl m-2">
-                <?php echo $Comment["blog_title"]; ?>
-            </h1>
-            <div class="flex justify-between">
-                <div class="flex gap-2 items-center">
-                    <img src="../../../user.png" class="size-6" />
-                    <span class="text-sm font-serif text-black/80"> <?php echo $Comment["comment_owner"]; ?>
-                    </span>
-                    <span class="text-sm text-gray-500">At :<?php echo $Comment["date"]; ?></span>
-                </div>
-
-                <!--CHECK THE STATUES-->
-
-                <?php
-                    if ($Comment["status"] == "pending") {
-                        echo "<span class='text-sm mx-3 bg-orange-300 p-1 px-2 rounded-lg text-white'>pending</span>";
-                    } else if ($Comment["status"] == "accepted") {
-
-                        echo "<span class='text-sm mx-3 bg-green-300 p-1 px-2 rounded-lg text-white'>Accepted</span>";
-                    } else if ($Comment["status"] == "rejected") {
-
-                        echo "<span class='text-sm mx-3 bg-red-300 p-1 px-2 rounded-lg text-white'>Rejected</span>";
-                    }
-                    ?>
+        <!--Card blog-->
+        <a href="../blog.php?id=<?php echo $row['idarticles']; ?>&owner=<?php echo $row['blog_owner']; ?>&title=<?php echo $row['blog_title']; ?>&desc=<?php echo $row['blog_description']; ?>"
+            class="block shadow-md w-full p-5 space-y-2 hover:shadow-lg transition-all">
+            <div class="flex gap-2 items-center">
+                <img src="../../../user.png" class="size-8" />
+                <span class="text-md font-serif text-black/80"><?php echo $row['blog_owner']; ?></span>
+                <span class="text-sm text-gray-500 font-serif">At :<?php echo $row["date_blog"]; ?></span>
 
             </div>
+            <span class="text-sm text-gray-400">category:</span>
 
-            <p class="p-2 text-sm"><?php echo $Comment["contenu"]; ?></p>
-        </div>
+            <span
+                class="text-sm text-white font-serif bg-black p-1 px-2 rounded-lg "><?php echo $row["catg_id"]; ?></span>
+            <hr class="w-full text-black/20 mt-2" />
+            <h1 class="text-2xl p-2 font-bold"><?php echo $row['blog_title']; ?></h1>
+            <h1 class="text-sm text-black/50 px-2"><?php echo $row['blog_description']; ?></h1>
+        </a>
+
         <?php
         }
         ?>
 
-
-    </div>
     </main>
 </body>
 

@@ -6,20 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        serif: ["Merriweather", "serif"],
-                        sans: ["Source Sans Pro", "sans-serif"],
-                    },
-                    colors: {
-                        primary: "#1a8917",
-                        dark: "#121212",
-                    },
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    serif: ["Merriweather", "serif"],
+                    sans: ["Source Sans Pro", "sans-serif"],
+                },
+                colors: {
+                    primary: "#1a8917",
+                    dark: "#121212",
                 },
             },
-        };
+        },
+    };
     </script>
     <title>Register</title>
 </head>
@@ -34,7 +34,7 @@
                 </h1>
             </div>
             <div class="flex items-center space-x-4">
-                <a href="/app/page.html"
+                <a href="/app/page.php"
                     class="bg-white p-2 px-4 border border-red-300 text-black curseur-pointer flex gap-2 transition-all hover:text-white hover:bg-red-300">Go
                     back to the Welcome page<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"

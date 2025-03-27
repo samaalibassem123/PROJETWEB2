@@ -4,7 +4,9 @@
 <head>
     <?php
     //GET THE BLOGS FROM THE DB
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     require '../../actions/utils/Dbconnection.php';
     $username = $_SESSION["username"];
     $stm = $conn->prepare("SELECT * FROM articles where blog_owner=:owner order by date_blog DESC;");
@@ -77,10 +79,13 @@
                             d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
                     </svg>Write</a>
             </div>
-            <div class="flex items-center space-x-4">
-                <a href="/app/page.html"
-                    class="bg-white p-2 px-4 border border-red-300 text-black curseur-pointer transition-all hover:text-white hover:bg-red-300">Log-out</a>
-            </div>
+            <!--THE LOGOUT BUTTON-->
+            <form action="../../actions/auth/logout.php" method="post">
+                <input type="submit"
+                    class="bg-white p-2 px-4 border border-red-300 text-black curseur-pointer transition-all hover:text-white hover:bg-red-300"
+                    value="Log-out" />
+            </form>
+        </div>
         </div>
     </header>
     <!--blogs-->

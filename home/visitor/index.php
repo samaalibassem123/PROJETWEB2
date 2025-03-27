@@ -5,32 +5,40 @@
 <head>
     <?php
     //GET THE BLOGS FROM THE DB
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     require '../../actions/utils/Dbconnection.php';
     $username = $_SESSION["username"];
     $stm = $conn->prepare("SELECT * FROM articles order by date_blog DESC");
     $stm->execute();
     $data = $stm->fetchAll(PDO::FETCH_ASSOC);
 
+
+    //GET CATERGORYS FROM THE DB
+    $stmCat = $conn->prepare("SELECT * from categories");
+    $stmCat->execute() or die("err" . $stm->errorInfo());
+    $Catgs = $stmCat->fetchAll(PDO::FETCH_ASSOC);
+
     ?>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        serif: ["Merriweather", "serif"],
-                        sans: ["Source Sans Pro", "sans-serif"],
-                    },
-                    colors: {
-                        primary: "#1a8917",
-                        dark: "#121212",
-                    },
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    serif: ["Merriweather", "serif"],
+                    sans: ["Source Sans Pro", "sans-serif"],
+                },
+                colors: {
+                    primary: "#1a8917",
+                    dark: "#121212",
                 },
             },
-        };
+        },
+    };
     </script>
     <title>Blogs</title>
 </head>
@@ -70,40 +78,58 @@
                     Notifications</a>
 
             </div>
-            <div class="flex items-center space-x-4">
-                <a href="/app/page.html"
-                    class="bg-white p-2 px-4 border border-red-300 text-black curseur-pointer transition-all hover:text-white hover:bg-red-300">Log-out</a>
-            </div>
+            <!--THE LOGOUT BUTTON-->
+            <form action="../../actions/auth/logout.php" method="post">
+                <input type="submit"
+                    class="bg-white p-2 px-4 border border-red-300 text-black curseur-pointer transition-all hover:text-white hover:bg-red-300"
+                    value="Log-out" />
+            </form>
+        </div>
         </div>
     </header>
+    <!--CATEGORYS-->
+    <nav class="px-20 py-5 border-b w-full h-fit">
+        <!--GET ALL CATEGORYS-->
+        <span class="text-lg mr-2 underline font-bold font-serif  text-nowrap">Categorys :</span>
+        <div class=" w-[90%] flex gap-2 items-center m-2 overflow-x-scroll" <?php
+        foreach ($Catgs as $cat) {
+            ?> <a href="../visitor/category/index.php?catname=<?php echo $cat["cat_name"] ?>"><span
+                class="border h-fit text-nowrap rounded-lg cursor-pointer bg-white hover:bg-black hover:text-white transition-all p-2"><?php
+                    echo $cat["cat_name"];
+                    ?></span></a>
+            <?php
+        }
+        ?>
+        </div>
 
+    </nav>
     <!--blogs-->
-    <main class="w-full p-24">
+    <main class="w-full py-5 p-24">
         <!--GET ALL THE BLOGS FROM THE DB-->
         <!--Card blog-->
         <?php
         foreach ($data as $row) {
             ?>
 
-            <!--Card blog-->
-            <a href="blog.php?id=<?php echo $row['idarticles']; ?>&owner=<?php echo $row['blog_owner']; ?>&title=<?php echo $row['blog_title']; ?>&desc=<?php echo $row['blog_description']; ?>"
-                class="block shadow-md w-full p-5 space-y-2 hover:shadow-lg transition-all">
-                <div class="flex gap-2 items-center">
-                    <img src="../../user.png" class="size-8" alt="">
-                    <span class="text-md font-serif text-black/80"><?php echo $row['blog_owner']; ?></span>
-                    <span class="text-sm text-gray-500 font-serif">At :<?php echo $row["date_blog"]; ?></span>
+        <!--Card blog-->
+        <a href="blog.php?id=<?php echo $row['idarticles']; ?>&owner=<?php echo $row['blog_owner']; ?>&title=<?php echo $row['blog_title']; ?>&desc=<?php echo $row['blog_description']; ?>"
+            class="block shadow-md w-full p-5 space-y-2 hover:shadow-lg transition-all">
+            <div class="flex gap-2 items-center">
+                <img src="../../user.png" class="size-8" alt="">
+                <span class="text-md font-serif text-black/80"><?php echo $row['blog_owner']; ?></span>
+                <span class="text-sm text-gray-500 font-serif">At :<?php echo $row["date_blog"]; ?></span>
 
-                </div>
-                <span class="text-sm text-gray-400">category:</span>
+            </div>
+            <span class="text-sm text-gray-400">category:</span>
 
-                <span
-                    class="text-sm text-white font-serif bg-black p-1 px-2 rounded-lg "><?php echo $row["catg_id"]; ?></span>
-                <hr class="w-full text-black/20 mt-2" />
-                <h1 class="text-2xl p-2 font-bold"><?php echo $row['blog_title']; ?></h1>
-                <h1 class="text-sm text-black/50 px-2"><?php echo $row['blog_description']; ?></h1>
-            </a>
+            <span
+                class="text-sm text-white font-serif bg-black p-1 px-2 rounded-lg "><?php echo $row["catg_id"]; ?></span>
+            <hr class="w-full text-black/20 mt-2" />
+            <h1 class="text-2xl p-2 font-bold"><?php echo $row['blog_title']; ?></h1>
+            <h1 class="text-sm text-black/50 px-2"><?php echo $row['blog_description']; ?></h1>
+        </a>
 
-            <?php
+        <?php
         }
         ?>
 

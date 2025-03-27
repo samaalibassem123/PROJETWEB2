@@ -13,7 +13,4 @@ $stm->execute();
 //redirect the user to the page
 header("Location:{$_SERVER["HTTP_REFERER"]}");
 
-
-
-
 ?>

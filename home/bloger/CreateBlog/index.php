@@ -66,10 +66,12 @@
                             d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
                     </svg>Write</a>
             </div>
-            <div class="flex items-center space-x-4">
-                <a href="/app/page.html"
-                    class="bg-white p-2 px-4 border border-red-300 text-black curseur-pointer transition-all hover:text-white hover:bg-red-300">Log-out</a>
-            </div>
+            <!--THE LOGOUT BUTTON-->
+            <form action="../../../../app/actions/auth/logout.php" method="post">
+                <input type="submit"
+                    class="bg-white p-2 px-4 border border-red-300 text-black curseur-pointer transition-all hover:text-white hover:bg-red-300"
+                    value="Log-out" />
+            </form>
         </div>
     </header>
     <!--CREATE A BLOG-->

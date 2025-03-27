@@ -3,6 +3,7 @@
 
 <head>
     <?php
+    session_start();
     //GET the data blog from THE LINK
     require "../../actions/utils/clean_inp.php";
     require "../../actions/utils/Dbconnection.php";
@@ -83,11 +84,12 @@
                     Notifications</a>
 
             </div>
-            <!--Redirect to action page that close the session and transform him to the home page -->
-            <div class="flex items-center space-x-4">
-                <a href="/app/page.html"
-                    class="bg-white p-2 px-4 border border-red-300 text-black curseur-pointer transition-all hover:text-white hover:bg-red-300">Log-out</a>
-            </div>
+            <!--THE LOGOUT BUTTON-->
+            <form action="../../../app/actions/auth/logout.php" method="post">
+                <input type="submit"
+                    class="bg-white p-2 px-4 border border-red-300 text-black curseur-pointer transition-all hover:text-white hover:bg-red-300"
+                    value="Log-out" />
+            </form>
         </div>
     </header>
     <main class="w-full h-fit p-24">
@@ -118,22 +120,37 @@
 
 
         <!--GET COMMENTS-->
-        <section class="p-5 h-[300px] shadow-sm  overflow-y-scroll">
+        <section class="p-5 h-[300px] shadow-sm  overflow-y-scroll rounded-md">
             <span class="font-bold underline">Comments:</span>
-
             <!--Comment card-->
             <?php foreach ($Comments as $Comment) {
-                ?>
+                //JUST SHOW ALL THE COMMENTS THAT OWNED BY THE USER OR BY OTHERS IF THEIR STATUS IS ACCEPTED
+                if (!($Comment["comment_owner"] != $_SESSION["username"] && $Comment["status"] != "accepted")) {
+                    ?>
             <div class="flex flex-col gap-2 h-fit" id="comments">
                 <div class="flex flex-col border-b border-gray-200 w-full p-2">
                     <div class="flex justify-between">
-                        <div class="flex gap-2 items-center">
-                            <img src="../../user.png" class="size-6" />
-                            <span
-                                class="text-sm font-serif text-black/80"><?php echo $Comment["comment_owner"]; ?></span>
-                            <span class="text-sm text-gray-500">At :<?php echo $Comment["date"]; ?></span>
+                        <div>
+                            <div class="flex gap-2 items-center">
+                                <img src="../../user.png" class="size-6" />
+                                <span
+                                    class="text-sm font-serif text-black/80"><?php echo $Comment["comment_owner"]; ?></span>
+                                <span class="text-sm text-gray-500">At :<?php echo $Comment["date"]; ?></span>
+                            </div>
+                            <p class="p-2 text-sm font-bold font-serif"><?php echo $Comment["contenu"];
+                                    ?></p>
                         </div>
-                        <div class="flex">
+
+
+                        <?php
+                                //CHECK IF THE USER HAVE THE RIGHTT TO EDIT THE COMMENTS OR NOT
+                                if ($Comment["comment_owner"] == $_SESSION["username"]) {
+                                    ?>
+                        <?php
+                                    //the user can edit the comment only if it is pending
+                                    if ($Comment["status"] == "pending") {
+                                        ?>
+                        <div class="flex items-center">
                             <!--DELETE COMMENTS FORM-->
                             <form action="../../actions/home/DeleteComment.php?id=<?php echo $Comment["idcomments"] ?>"
                                 method="post" class="px-2">
@@ -142,52 +159,54 @@
                                     value="Delete comment">
                             </form>
                             <!--EDIT COMMENTS BUTTON-->
-                            <button onclick="Showprompt()"
+                            <button onclick="Showprompt(<?php echo $Comment['idcomments']; ?>)"
                                 class="text-sm underline text-gray-400 cursor-pointer hover:text-green-400">Edit
                                 comment</button>
+
+                            <!--UPDATE THE COMMENTS FORM-->
+                            <section id="prompt<?php echo $Comment["idcomments"]; ?>"
+                                class="transition-all bg-black/80 fixed top-0 left-0 z-50 w-full h-svh hidden flex-col items-center justify-center ">
+                                <form
+                                    action="../../actions/home/UpdateComment.php?id=<?php echo $Comment["idcomments"]; ?>"
+                                    method="post" class="flex flex-col p-4 w-[500px] gap-3 bg-white">
+                                    <div class="flex w-full justify-between">
+                                        <legend class="font-bold ">Update the Comment</legend>
+                                        <span class="text-xl cursor-pointer"
+                                            onclick="Closeprompt(<?php echo $Comment['idcomments']; ?>)">X</span>
+                                    </div>
+                                    <input type="text" name="comment" class="outline-none border w-full p-2 font-serif"
+                                        placeholder="Type the new comment">
+                                    <input type="submit" value="Update"
+                                        onclick="Closeprompt(<?php echo $Comment['idcomments']; ?>)"
+                                        class="border px-8 p-2 bg-black/80 text-white font-serif cursor-pointer hover:bg-black transition-all">
+                                </form>
+                            </section>
+                            <!--SHOW THE STATUS-->
                             <?php
+                                    }
 
-                                if ($Comment["status"] == "pending") {
-                                    echo "<span class='text-sm mx-3 bg-orange-300 p-1 px-2 rounded-lg text-white'>pending</span>";
-                                } else if ($Comment["status"] == "accepted") {
+                                    if ($Comment["status"] == "pending") {
+                                        echo "<span class='text-sm mx-3 bg-orange-300 p-1 px-2 rounded-lg text-white  h-fit'>pending</span>";
+                                    } else if ($Comment["status"] == "accepted") {
 
-                                    echo "<span class='text-sm mx-3 bg-green-300 p-1 px-2 rounded-lg text-white'>Accepted</span>";
-                                } else if ($Comment["status"] == "rejected") {
+                                        echo "<span class='text-sm mx-3 bg-green-300 p-1 px-2 rounded-lg text-white h-fit'>Accepted</span>";
+                                    } else if ($Comment["status"] == "rejected") {
 
-                                    echo "<span class='text-sm mx-3 bg-red-300 p-1 px-2 rounded-lg text-white'>Rejected</span>";
-                                }
-                                ?>
+                                        echo "<span class='text-sm mx-3 bg-red-300 p-1 px-2 rounded-lg text-white  h-fit'>Rejected</span>";
+                                    }
+                                    ?>
                         </div>
+                        <?php
+                                } ?>
 
                     </div>
-                    <p class="p-2 text-sm"><?php echo $Comment["contenu"]; ?></p>
                 </div>
-
             </div>
-            <section id="prompt"
-                class="transition-all bg-black/80 fixed top-0 left-0 z-50 w-full h-svh hidden flex-col items-center justify-center ">
-                <!--UPDATE THE COMMENTS FORM-->
-                <form action="../../actions/home/UpdateComment.php?id=<?php echo $Comment["idcomments"] ?>"
-                    method="post" class="flex flex-col p-4 w-[500px] gap-3 bg-white">
-                    <div class="flex w-full justify-between">
-                        <legend class="font-bold ">Update the Comment</legend>
-                        <span class="text-xl cursor-pointer" onclick="Closeprompt()">X</span>
-                    </div>
-                    <input type="text" name="comment" class="outline-none border w-full p-2 font-serif"
-                        placeholder="Type the new comment">
-                    <input type="submit" value="Update" onclick="Closeprompt()"
-                        class="border px-8 p-2 bg-black/80 text-white font-serif cursor-pointer hover:bg-black transition-all">
-                </form>
-                <!--CHECK THE STATUES-->
-
-            </section>
             </div>
-
             <?php }
+            }
             ?>
         </section>
-
-
     </main>
 
 
@@ -195,12 +214,15 @@
 </body>
 
 <script>
-function Showprompt() {
-    document.getElementById("prompt").style.display = "flex";
+function Showprompt(e) {
+
+    document.getElementById("prompt" + e).style.display = "flex"
+
 }
 
 function Closeprompt() {
-    document.getElementById("prompt").style.display = "none";
+    window.location.reload()
+    document.getElementById("prompt" + e).style.display = "none";
 }
 </script>
 

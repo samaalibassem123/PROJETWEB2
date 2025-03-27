@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require "../utils/Dbconnection.php";
 require "../utils/clean_inp.php";
 
