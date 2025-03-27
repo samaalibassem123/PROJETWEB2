@@ -11,11 +11,20 @@
     $title = Clean_input($_GET['title']);
     $desc = Clean_input($_GET['desc']);
     //GET THE TEXT for the blog FROM THE DB 
-    $stm = $conn->prepare("SELECT blog_text from articles where idarticles=:id");
+    $stm = $conn->prepare("SELECT blog_text from articles where idarticles=:id ");
     $stm->bindParam(":id", $id);
     $stm->execute();
     $data = $stm->fetch(PDO::FETCH_ASSOC);
     $text = $data["blog_text"];
+
+
+
+    //GET COMMENTS FROM DB
+    $stmComment = $conn->prepare("SELECT * from comments where id_art=:id order by date DESC");
+    $stmComment->bindParam(":id", $id);
+    $stmComment->execute();
+    $Comments = $stmComment->fetchAll(PDO::FETCH_ASSOC);
+
     ?>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -81,10 +90,10 @@
             </div>
         </div>
     </header>
-    <main class="w-full h-svh p-24">
+    <main class="w-full h-fit p-24">
 
         <!--Card blog-->
-        <div class="block shadow-md w-full p-5 space-y-2 hover:shadow-lg transition-all">
+        <div class="block h-fit shadow-md w-full p-5 space-y-2 hover:shadow-lg transition-all ">
             <div class="flex gap-2 items-center">
                 <img src="../../user.png" class="size-8" alt="">
                 <span class="text-md font-serif text-black/80"><?php echo $owner; ?></span>
@@ -97,7 +106,7 @@
 
 
             <!--ADD COMMENTS-->
-            <form action="" method="post" class="flex gap-3">
+            <form action="../../actions/home/CreateComment.php?id=<?php echo $id; ?>" method="post" class="flex gap-3">
                 <input type="text" name="comment" class="outline-none border w-[90%] p-2 font-serif"
                     placeholder="Add a comment down Here">
                 <input type="submit" value="post"
@@ -105,16 +114,23 @@
             </form>
 
 
+        </div>
 
+
+        <!--GET COMMENTS-->
+        <section class="p-5 h-[300px] shadow-sm  overflow-y-scroll">
             <span class="font-bold underline">Comments:</span>
-            <!--GET COMMENTS-->
-            <div class="flex flex-col gap-2" id="comments">
-                <!--Comment card-->
+
+            <!--Comment card-->
+            <?php foreach ($Comments as $Comment) { ?>
+            <div class="flex flex-col gap-2 h-fit" id="comments">
                 <div class="flex flex-col border-b border-gray-200 w-full p-2">
                     <div class="flex justify-between">
                         <div class="flex gap-2 items-center">
                             <img src="../../user.png" class="size-6" />
-                            <span class="text-sm font-serif text-black/80">user name</span>
+                            <span
+                                class="text-sm font-serif text-black/80"><?php echo $Comment["comment_owner"]; ?></span>
+                            <span class="text-sm text-gray-500">At :<?php echo $Comment["date"]; ?></span>
                         </div>
                         <div class="flex">
                             <!--DELETE COMMENTS FORM-->
@@ -130,26 +146,30 @@
                         </div>
 
                     </div>
-                    <p class="p-2 text-sm">Thank you for these tips! I am eager to know which of them contributed the
-                        most to your
-                        3.9 ->0.9 seconds load time reduction!</p>
+                    <p class="p-2 text-sm"><?php echo $Comment["contenu"]; ?></p>
                 </div>
             </div>
-        </div>
-        <section id="prompt"
-            class="transition-all bg-black/80 fixed top-0 left-0 z-50 w-full h-svh hidden flex-col items-center justify-center ">
-            <!--UPDATE THE COMMENTS FORM-->
-            <form action="" method="post" class="flex flex-col p-4 w-[500px] gap-3 bg-white">
-                <div class="flex w-full justify-between">
-                    <legend class="font-bold ">Update the Comment</legend>
-                    <span class="text-xl cursor-pointer" onclick="Closeprompt()">X</span>
-                </div>
-                <input type="text" name="comment" class="outline-none border w-full p-2 font-serif"
-                    placeholder="Type the new comment">
-                <input type="submit" value="Update" onclick="Closeprompt()"
-                    class="border px-8 p-2 bg-black/80 text-white font-serif cursor-pointer hover:bg-black transition-all">
-            </form>
+            <section id="prompt"
+                class="transition-all bg-black/80 fixed top-0 left-0 z-50 w-full h-svh hidden flex-col items-center justify-center ">
+                <!--UPDATE THE COMMENTS FORM-->
+                <form action="" method="post" class="flex flex-col p-4 w-[500px] gap-3 bg-white">
+                    <div class="flex w-full justify-between">
+                        <legend class="font-bold ">Update the Comment</legend>
+                        <span class="text-xl cursor-pointer" onclick="Closeprompt()">X</span>
+                    </div>
+                    <input type="text" name="comment" class="outline-none border w-full p-2 font-serif"
+                        placeholder="Type the new comment">
+                    <input type="submit" value="Update" onclick="Closeprompt()"
+                        class="border px-8 p-2 bg-black/80 text-white font-serif cursor-pointer hover:bg-black transition-all">
+                </form>
+            </section>
+            </div>
+
+            <?php ;
+            } ?>
         </section>
+
+
     </main>
 
 

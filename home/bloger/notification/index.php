@@ -2,6 +2,18 @@
 <html lang="en">
 
 <head>
+    <?php
+    session_start();
+    //GET the data blog from THE LINK
+    require "../../../actions/utils/Dbconnection.php";
+    $owner = $_SESSION["username"];
+
+    //GET COMMENTS FROM DB
+    $stm = $conn->prepare("SELECT * from comments c, articles a where c.id_art=a.idarticles and a.blog_owner=:owner order by c.date DESC");
+    $stm->bindParam(":owner", $owner);
+    $stm->execute();
+    $Comments = $stm->fetchAll(PDO::FETCH_ASSOC);
+    ?>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -74,16 +86,27 @@
     </header>
     <!--GET ONLY THE COMMENTS THAT HAVE STAUS PENDING-->
     <div class="flex flex-col gap-2" id="comments">
+        <?php
+        foreach ($Comments as $Comment) {
+            ?>
         <!--Comment card-->
         <div class="flex flex-col border-b border-gray-200 w-full p-2">
             <h1 class="text-2xl m-2">
-                Blog Name or title</h1>
+                <?php echo $Comment["blog_title"]; ?>
+            </h1>
             <div class="flex justify-between">
                 <div class="flex gap-2 items-center">
                     <img src="../../../user.png" class="size-6" />
-                    <span class="text-sm font-serif text-black/80">user name</span>
+                    <span class="text-sm font-serif text-black/80"> <?php echo $Comment["comment_owner"]; ?>
+                    </span>
+                    <span class="text-sm text-gray-500">At :<?php echo $Comment["date"]; ?></span>
+
                 </div>
+
                 <div class="flex gap-2">
+                    <?php
+                        if ($Comment["status"] == "pending") {
+                            ?>
                     <!--CHANGE THE STATUS TO REJECTED COMMENTS FORM-->
                     <form action="" class="px-2 flex items-center">
                         <input type="submit" class="text-sm underline text-gray-400 cursor-pointer hover:text-red-400"
@@ -94,13 +117,29 @@
                         <input type="submit" class="text-sm underline text-gray-400 cursor-pointer hover:text-green-400"
                             value="Accept comment">
                     </form>
+                    <!--CHECK THE STATUES-->
+                    <?php
+                        }
+                        if ($Comment["status"] == "pending") {
+                            echo "<span class='text-sm mx-3 bg-orange-300 p-1 px-2 rounded-lg text-white'>pending</span>";
+                        } else if ($Comment["status"] == "accepted") {
+
+                            echo "<span class='text-sm mx-3 bg-green-300 p-1 px-2 rounded-lg text-white'>Accepted</span>";
+                        } else if ($Comment["status"] == "rejected") {
+
+                            echo "<span class='text-sm mx-3 bg-red-300 p-1 px-2 rounded-lg text-white'>Rejected</span>";
+                        }
+                        ?>
                 </div>
+
             </div>
 
-            <p class="p-2 text-sm">Thank you for these tips! I am eager to know which of them contributed the most to
-                your 3.9 ->0.9 seconds load time reduction!</p>
+            <p class="p-2 text-sm"><?php echo $Comment["contenu"]; ?></p>
         </div>
-
+        <?php
+            ;
+        }
+        ?>
 
     </div>
     </main>

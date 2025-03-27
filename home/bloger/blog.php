@@ -16,6 +16,14 @@
     $stm->execute();
     $data = $stm->fetch(PDO::FETCH_ASSOC);
     $text = $data["blog_text"];
+
+
+
+    //GET COMMENTS FROM DB
+    $stmComment = $conn->prepare("SELECT * from comments where id_art=:id order by date DESC");
+    $stmComment->bindParam(":id", $id);
+    $stmComment->execute();
+    $Comments = $stmComment->fetchAll(PDO::FETCH_ASSOC);
     ?>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -99,31 +107,40 @@
             <h1 class="text-sm text-black/50 px-2"><?php echo $desc; ?></h1>
             <p class="p-2"> <?php echo $text; ?> </p>
 
+
+        </div>
+        <!--GET COMMENTS-->
+        <section class="p-5 h-[300px] shadow-sm  overflow-y-scroll">
             <span class="font-bold underline">Comments:</span>
-            <!--GET ONLY THE COMMENTS THAT HAVE STATUS ACCEPTED-->
-            <div class="flex flex-col gap-2" id="comments">
-                <!--Comment card-->
+
+            <!--Comment card-->
+            <?php
+            foreach ($Comments as $Comment) {
+                //CHECK IF COMMENT IS NOT PENDING SHOW HIM
+                if ($Comment["status"] != "pending") {
+                    ?>
+            <div class="flex flex-col gap-2 h-fit" id="comments">
                 <div class="flex flex-col border-b border-gray-200 w-full p-2">
                     <div class="flex justify-between">
                         <div class="flex gap-2 items-center">
                             <img src="../../user.png" class="size-6" />
-                            <span class="text-sm font-serif text-black/80">user name</span>
+                            <span
+                                class="text-sm font-serif text-black/80"><?php echo $Comment["comment_owner"]; ?></span>
+                            <span class="text-sm text-gray-500">At :<?php echo $Comment["date"]; ?></span>
+
                         </div>
-                        <!--DELETE COMMENTS FORM-->
-                        <form action="" class="px-2">
-                            <input type="submit"
-                                class="text-sm underline text-gray-400 cursor-pointer hover:text-red-400"
-                                value="Delete comment">
-                        </form>
                     </div>
-                    <p class="p-2 text-sm">Thank you for these tips! I am eager to know which of them contributed the
-                        most to your
-                        3.9 ->0.9 seconds load time reduction!</p>
+                    <p class="p-2 text-sm"><?php echo $Comment["contenu"]; ?></p>
                 </div>
             </div>
-        </div>
+            </div>
 
+            <?php
+                }
+            } ?>
+        </section>
     </main>
+
 </body>
 
 </html>

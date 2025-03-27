@@ -8,7 +8,7 @@
     session_start();
     require '../../actions/utils/Dbconnection.php';
     $username = $_SESSION["username"];
-    $stm = $conn->prepare("SELECT * FROM articles");
+    $stm = $conn->prepare("SELECT * FROM articles order by date_blog DESC");
     $stm->execute();
     $data = $stm->fetchAll(PDO::FETCH_ASSOC);
 
@@ -78,7 +78,7 @@
     </header>
 
     <!--blogs-->
-    <main class="w-full h-svh p-24">
+    <main class="w-full p-24">
         <!--GET ALL THE BLOGS FROM THE DB-->
         <!--Card blog-->
         <?php
@@ -91,6 +91,8 @@
             <div class="flex gap-2 items-center">
                 <img src="../../user.png" class="size-8" alt="">
                 <span class="text-md font-serif text-black/80"><?php echo $row['blog_owner']; ?></span>
+                <span class="text-sm text-gray-500 font-serif">At :<?php echo $row["date_blog"]; ?></span>
+
             </div>
             <hr class="w-full text-black/20" />
             <h1 class="text-2xl p-2 font-bold"><?php echo $row['blog_title']; ?></h1>
