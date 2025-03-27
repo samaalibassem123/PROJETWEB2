@@ -10,6 +10,7 @@
     $owner = Clean_input($_GET['owner']);
     $title = Clean_input($_GET['title']);
     $desc = Clean_input($_GET['desc']);
+    $catg = Clean_input($_GET['catg']);
     //GET THE TEXT for the blog FROM THE DB 
     $stm = $conn->prepare("SELECT blog_text from articles where idarticles=:id");
     $stm->bindParam(":id", $id);
@@ -103,11 +104,47 @@
                     <img src="../../user.png" class="size-8" alt="">
                     <span class="text-md font-serif text-black/80"><?php echo $owner; ?></span>
                 </div>
-                <!--DELETE BLOG FORM-->
-                <form action="../../actions/home/DeleteBlog.php?id=<?php echo $id; ?>" method="post" class="px-2">
-                    <input type="submit" class="text-sm underline text-gray-400 cursor-pointer hover:text-red-400"
-                        value="Delete The Blog">
-                </form>
+                <div class="flex items-center gap-2">
+                    <!--DELETE BLOG FORM-->
+                    <form action="../../actions/home/DeleteBlog.php?id=<?php echo $id; ?>" method="post" class="px-2">
+                        <input type="submit" class="text-sm underline text-gray-400 cursor-pointer hover:text-red-400"
+                            value="Delete The Blog">
+                    </form>
+                    <!--UPDATE BLOG BUTTON-->
+                    <button type="submit" onclick="Showprompt()"
+                        class="text-sm underline text-gray-400 cursor-pointer hover:text-blue-400">Update
+                        The Blog</button>
+                    <!--UPDATE BLOG FORM-->
+
+                    <div id="prompt"
+                        class="transition-all bg-black/80 fixed top-0 left-0 z-50 w-full h-svh hidden flex-col items-center justify-center ">
+                        <form action="../../actions/home/UpdateBlog.php?id=<?php echo $id ?>"
+                            class="flex flex-col gap-3 bg-white p-5 w-[60%]" method="post">
+                            <div class="text-right w-full cursor-pointer" onclick="Closeprompt()">X</div>
+                            <input type="text" name="title" placeholder="Write the title" required
+                                value="<?php echo $title; ?>"
+                                class="w-full p-2 focus:border-b outline-none text-3xl font-serif">
+
+                            <input type="text" name="catg" value="<?php echo $catg; ?>"
+                                placeholder="Categorie exmp : science , computer science, astronomy ..." required
+                                class="w-full p-2 focus:border-b outline-none text-xl font-serif">
+
+                            <input type="text" name="desc" placeholder="Description (optional)"
+                                value="<?php echo $desc; ?>"
+                                class="w-full px-3 focus:border-b outline-none text-lg text-black/50">
+
+                            <textarea name="text" placeholder="Type your text blog Here !"
+                                class="w-full p-3 focus:border-b outline-none text-lg " rows="10"
+                                required><?php echo $text; ?></textarea>
+                            <input type="submit"
+                                class="border p-2 px-5 w-[200px] cursor-pointer font-serif hover:bg-black/80 hover:text-white transition-all">
+                        </form>
+                    </div>
+
+
+                </div>
+
+
             </div>
             <hr class="w-full text-black/20" />
             <h1 class="text-2xl p-2 font-bold"><?php echo $title; ?></h1>
@@ -149,5 +186,16 @@
     </main>
 
 </body>
+
+<script>
+function Showprompt() {
+    document.getElementById("prompt").style.display = "flex";
+}
+
+function Closeprompt() {
+    window.location.reload();
+    document.getElementById("prompt").style.display = "none";
+}
+</script>
 
 </html>

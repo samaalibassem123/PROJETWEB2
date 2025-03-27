@@ -11,6 +11,7 @@
     $stm->bindParam(":owner", $username);
     $stm->execute();
     $data = $stm->fetchAll(PDO::FETCH_ASSOC);
+
     ?>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -90,15 +91,19 @@
             ?>
 
         <!--Card blog-->
-        <a href="blog.php?id=<?php echo $row['idarticles']; ?>&owner=<?php echo $row['blog_owner']; ?>&title=<?php echo $row['blog_title']; ?>&desc=<?php echo $row['blog_description']; ?>"
+        <a href="blog.php?id=<?php echo $row['idarticles']; ?>&owner=<?php echo $row['blog_owner']; ?>&title=<?php echo $row['blog_title']; ?>&desc=<?php echo $row['blog_description']; ?>&catg=<?php echo $row["catg_id"]; ?>"
             class="block shadow-md w-full p-5 space-y-2 hover:shadow-lg transition-all">
             <div class="flex gap-2 items-center">
                 <img src="../../user.png" class="size-8" alt="">
                 <span class="text-md font-serif text-black/80"><?php echo $row['blog_owner']; ?></span>
                 <span class="text-sm text-gray-500 font-serif">At :<?php echo $row["date_blog"]; ?></span>
+                <br>
 
             </div>
-            <hr class="w-full text-black/20" />
+            <span class="text-sm text-gray-400">catg:</span>
+            <span
+                class="text-sm text-white font-serif bg-black p-1 px-2 rounded-lg "><?php echo $row["catg_id"]; ?></span>
+            <hr class="w-full text-black/20 mt-2" />
             <h1 class="text-2xl p-2 font-bold"><?php echo $row['blog_title']; ?></h1>
             <h1 class="text-sm text-black/50 px-2"><?php echo $row['blog_description']; ?></h1>
         </a>
