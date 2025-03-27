@@ -3,9 +3,12 @@
 
 <head>
     <?php
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }    //GET the data blog from THE LINK
+    session_start();
+    //PROTECT THE ROUTER
+    if (empty($_SESSION["username"]) || empty($_SESSION["role"]) || $_SESSION["role"] != "bloger") {
+        header("Location:http://localhost/app/auth/login/index.php");
+    }
+    //GET the data blog from THE LINK
     require "../../../actions/utils/Dbconnection.php";
     $owner = $_SESSION["username"];
 
@@ -94,15 +97,15 @@
             ?>
         <!--Comment card-->
         <div class="flex flex-col border-b border-gray-200 w-full p-2">
-            <h1 class="text-2xl m-2">
+            <h1 class="text-2xl m-2 font-serif font-bold">
                 <?php echo $Comment["blog_title"]; ?>
             </h1>
             <div class="flex justify-between">
                 <div class="flex gap-2 items-center">
                     <img src="../../../user.png" class="size-6" />
-                    <span class="text-sm font-serif text-black/80"> <?php echo $Comment["comment_owner"]; ?>
+                    <span class="text-sm font-serif text-black/80 font-bold"> <?php echo $Comment["comment_owner"]; ?>
                     </span>
-                    <span class="text-sm text-gray-500">At :<?php echo $Comment["date"]; ?></span>
+                    <span class="text-sm text-gray-500 underline">At :<?php echo $Comment["date"]; ?></span>
 
                 </div>
 
@@ -139,7 +142,7 @@
 
             </div>
 
-            <p class=" p-2 text-sm"><?php echo $Comment["contenu"]; ?></p>
+            <p class=" p-2 text-md capitalize"><?php echo $Comment["contenu"]; ?></p>
         </div>
         <?php
             ;

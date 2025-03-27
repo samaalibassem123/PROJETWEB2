@@ -4,6 +4,10 @@
 <head>
     <?php
     session_start();
+    //PROTECT THE ROUTER
+    if (empty($_SESSION["username"]) || empty($_SESSION["role"]) || $_SESSION["role"] != "visitor") {
+        header("Location:http://localhost/app/auth/login/index.php");
+    }
     //GET the data blog from THE LINK
     require "../../actions/utils/clean_inp.php";
     require "../../actions/utils/Dbconnection.php";
@@ -101,10 +105,9 @@
                 <span class="text-md font-serif text-black/80"><?php echo $owner; ?></span>
             </div>
             <hr class="w-full text-black/20" />
-            <h1 class="text-2xl p-2 font-bold"><?php echo $title; ?></h1>
-            <h1 class="text-sm text-black/50 px-2"><?php echo $desc; ?></h1>
+            <h1 class="capitalize text-4xl font-serif p-2 font-bold"><?php echo $title; ?></h1>
+            <h1 class="text-sm font-serif text-black/50 px-2"><?php echo $desc; ?></h1>
             <p class="p-2"> <?php echo $text; ?> </p>
-
 
 
             <!--ADD COMMENTS-->

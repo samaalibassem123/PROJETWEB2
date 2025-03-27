@@ -4,15 +4,26 @@
 <head>
     <?php
     //GET THE BLOGS FROM THE DB
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
+    
+    session_start();
+    //PROTECT THE ROUTER
+    if (empty($_SESSION["username"]) || empty($_SESSION["role"]) || $_SESSION["role"] != "bloger") {
+        header("Location:http://localhost/app/auth/login/index.php");
     }
+
     require '../../actions/utils/Dbconnection.php';
     $username = $_SESSION["username"];
     $stm = $conn->prepare("SELECT * FROM articles where blog_owner=:owner order by date_blog DESC;");
     $stm->bindParam(":owner", $username);
     $stm->execute();
     $data = $stm->fetchAll(PDO::FETCH_ASSOC);
+
+
+    //GET CATERGORYS FROM THE DB
+    $stmCat = $conn->prepare("SELECT * from categories");
+    $stmCat->execute() or die("err" . $stm->errorInfo());
+    $Catgs = $stmCat->fetchAll(PDO::FETCH_ASSOC);
+
 
     ?>
     <meta charset="UTF-8" />
@@ -88,6 +99,20 @@
         </div>
         </div>
     </header>
+    <!--CATEGORYS-->
+    <nav class="px-20 py-5 border-b w-full h-fit">
+        <!--GET ALL CATEGORYS-->
+        <span class="text-lg mr-2 underline font-bold font-serif  text-nowrap">Categorys :</span>
+        <div class=" w-[90%] flex gap-2 items-center  overflow-x-scroll"> <?php
+        foreach ($Catgs as $cat) {
+            ?> <a href="../bloger/category/index.php?catname=<?php echo $cat["cat_name"] ?>" class="my-2"><span
+                    class="border h-fit text-nowrap rounded-lg cursor-pointer bg-white hover:bg-black hover:text-white transition-all p-2"><?php echo $cat["cat_name"]; ?></span></a>
+            <?php
+        }
+        ?>
+        </div>
+
+    </nav>
     <!--blogs-->
     <main class="w-full p-24 py-10 space-y-5">
         <!--GET ALL THE BLOGS FROM THE DB-->

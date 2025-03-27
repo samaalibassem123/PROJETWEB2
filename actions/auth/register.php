@@ -32,7 +32,7 @@ if ($password != $cpassword) {
     try {
         $stm->execute();
         echo "<script>
-                window.location.replace('http://localhost/app/auth/login/index.html');
+                window.location.replace('http://localhost/app/auth/login/index.php');
             </script>";
     } catch (PDOException $e) {
         echo "<script>

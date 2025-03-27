@@ -4,12 +4,15 @@
 
 <head>
     <?php
-    //GET THE BLOGS FROM THE DB
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
+
+
+    session_start();
+    //PROTECT THE ROUTER
+    if (empty($_SESSION["username"]) || empty($_SESSION["role"]) || $_SESSION["role"] != "visitor") {
+        header("Location:http://localhost/app/auth/login/index.php");
     }
     require "../../../actions/utils/Dbconnection.php";
-
+    //GET THE BLOGS FROM THE DB
     $cat_name = $_GET["catname"];
 
     $username = $_SESSION["username"];

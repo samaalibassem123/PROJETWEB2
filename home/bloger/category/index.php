@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
     <?php
     session_start();
@@ -8,6 +9,24 @@
     if (empty($_SESSION["username"]) || empty($_SESSION["role"]) || $_SESSION["role"] != "bloger") {
         header("Location:http://localhost/app/auth/login/index.php");
     }
+
+
+    require "../../../actions/utils/Dbconnection.php";
+
+    $cat_name = $_GET["catname"];
+    //GET THE BLOGS FROM THE DB
+    $username = $_SESSION["username"];
+    $stm = $conn->prepare("SELECT * FROM articles where catg_id=:catname order by date_blog DESC");
+    $stm->bindParam(":catname", $cat_name);
+    $stm->execute();
+    $data = $stm->fetchAll(PDO::FETCH_ASSOC);
+
+
+    //GET CATERGORYS FROM THE DB
+    $stmCat = $conn->prepare("SELECT * from categories");
+    $stmCat->execute() or die("err" . $stm->errorInfo());
+    $Catgs = $stmCat->fetchAll(PDO::FETCH_ASSOC);
+
     ?>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -28,7 +47,7 @@
         },
     };
     </script>
-    <title>New Blog</title>
+    <title>Blogs</title>
 </head>
 
 <body>
@@ -64,7 +83,7 @@
                         <path d="M4 2C2.8 3.7 2 5.7 2 8" />
                     </svg>
                     Notifications</a>
-                <a href="" class="hover:text-black/80 flex gap-2 items-end hover:border-b ">
+                <a href="../CreateBlog/index.php" class="hover:text-black/80 flex gap-2 items-end hover:border-b ">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="23" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="lucide lucide-square-pen">
@@ -72,6 +91,7 @@
                         <path
                             d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
                     </svg>Write</a>
+
             </div>
             <!--THE LOGOUT BUTTON-->
             <form action="../../../../app/actions/auth/logout.php" method="post">
@@ -80,25 +100,50 @@
                     value="Log-out" />
             </form>
         </div>
+        </div>
     </header>
-    <!--CREATE A BLOG-->
-    <main class="w-full h-svh p-24">
-        <form action="../../../actions/home/CreateBlog.php" class="flex flex-col gap-3" method="post">
+    <!--CATEGORYS-->
+    <nav class="px-20 py-5 border-b w-full h-fit">
+        <!--GET ALL CATEGORYS-->
+        <span class="text-lg mr-2 underline font-bold font-serif  text-nowrap">Categorys :</span>
 
-            <input type="text" name="title" placeholder="Write the title" required
-                class="w-full p-2 focus:border-b outline-none text-3xl font-serif">
+        <span class=" w-[90%] flex gap-2 items-center p-1  overflow-x-scroll">
+            <span class="border h-fit text-nowrap rounded-lg cursor-pointer  bg-black text-white transition-all p-2"><?php
+            echo $cat_name;
+            ?></span>
+        </span>
 
-            <input type="text" name="catg" placeholder="Categorie exmp : science , computer science, astronomy ..."
-                required class="w-full p-2 focus:border-b outline-none text-xl font-serif">
+    </nav>
+    <!--blogs-->
+    <main class="w-full py-5 p-24">
+        <!--GET ALL THE BLOGS FROM THE DB-->
+        <!--Card blog-->
+        <?php
+        foreach ($data as $row) {
+            ?>
 
-            <input type="text" name="desc" placeholder="Description (optional)"
-                class="w-full px-3 focus:border-b outline-none text-lg text-black/50">
+        <!--Card blog-->
+        <a href="../blog.php?id=<?php echo $row['idarticles']; ?>&owner=<?php echo $row['blog_owner']; ?>&title=<?php echo $row['blog_title']; ?>&desc=<?php echo $row['blog_description']; ?>"
+            class="block shadow-md w-full p-5 space-y-2 hover:shadow-lg transition-all">
+            <div class="flex gap-2 items-center">
+                <img src="../../../user.png" class="size-8" />
+                <span class="text-md font-serif text-black/80"><?php echo $row['blog_owner']; ?></span>
+                <span class="text-sm text-gray-500 font-serif">At :<?php echo $row["date_blog"]; ?></span>
 
-            <textarea name="text" placeholder="Type your text blog Here !"
-                class="w-full p-3 focus:border-b outline-none text-lg " rows="10" required></textarea>
-            <input type="submit"
-                class="border p-2 px-5 w-[200px] cursor-pointer font-serif hover:bg-black/80 hover:text-white transition-all">
-        </form>
+            </div>
+            <span class="text-sm text-gray-400">category:</span>
+
+            <span
+                class="text-sm text-white font-serif bg-black p-1 px-2 rounded-lg "><?php echo $row["catg_id"]; ?></span>
+            <hr class="w-full text-black/20 mt-2" />
+            <h1 class="text-2xl p-2 font-bold"><?php echo $row['blog_title']; ?></h1>
+            <h1 class="text-sm text-black/50 px-2"><?php echo $row['blog_description']; ?></h1>
+        </a>
+
+        <?php
+        }
+        ?>
+
     </main>
 </body>
 

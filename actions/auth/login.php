@@ -26,7 +26,7 @@ if (!$res["username"]) {
     //redirect the user to the login page if u d'ont found the username
     echo "<script>
                 alert('username Incorrect')
-                window.location.replace('http://localhost/app/auth/login/index.html');
+                window.location.replace('http://localhost/app/auth/login/index.php');
         </script>;";
 
 } else if (password_verify($password, $res["password"]) == true) {
@@ -52,7 +52,7 @@ if (!$res["username"]) {
 } else {//If the password is incorrect
     echo "<script>
             alert('Password Incorrect')
-            window.location.replace('http://localhost/app/auth/login/index.html');
+            window.location.replace('http://localhost/app/auth/login/index.php');
     </script>";
 
 }

@@ -2,6 +2,18 @@
 <html lang="en">
 
 <head>
+    <?php
+    //PROTECT THE ROUTE
+    session_start();
+    if (!empty($_SESSION["username"]) && !empty($_SESSION["role"])) {
+        if ($_SESSION["role"] == "visitor") {
+            header("Location:http://localhost/app/home/visitor/index.php");
+        } else if ($_SESSION["role"] == "bloger") {
+            header("Location:http://localhost/app/home/bloger/index.php");
+        }
+    }
+    ?>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -34,7 +46,7 @@
                 </h1>
             </div>
             <div class="flex items-center space-x-4">
-                <a href="/app/auth/login/index.html"
+                <a href="/app/auth/login/index.php"
                     class="bg-white p-2 px-4 border border-red-300 text-black curseur-pointer transition-all hover:text-white hover:bg-red-300">Sign
                     In</a>
             </div>

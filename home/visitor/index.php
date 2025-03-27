@@ -4,11 +4,14 @@
 
 <head>
     <?php
-    //GET THE BLOGS FROM THE DB
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
+    session_start();
+    //PROTECT THE ROUTER
+    if (empty($_SESSION["username"]) || empty($_SESSION["role"]) || $_SESSION["role"] != "visitor") {
+        header("Location:http://localhost/app/auth/login/index.php");
     }
     require '../../actions/utils/Dbconnection.php';
+    //GET THE BLOGS FROM THE DB
+    
     $username = $_SESSION["username"];
     $stm = $conn->prepare("SELECT * FROM articles order by date_blog DESC");
     $stm->execute();

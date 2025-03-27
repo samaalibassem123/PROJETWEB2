@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php
+session_start();
+//PROTECT THE ROUTER
+if (!empty($_SESSION["username"]) && !empty($_SESSION["role"])) {
+  if ($_SESSION["role"] == "visitor") {
+    header("Location:http://localhost/app/home/visitor/index.php");
+  } else if ($_SESSION["role"] == "bloger") {
+    header("Location:http://localhost/app/home/bloger/index.php");
+  }
+}
+?>
 
 <head>
-    <?php
-    session_start();
-    //PROTECT THE ROUTER
-    if (!empty($_SESSION["username"]) && !empty($_SESSION["role"])) {
-        if ($_SESSION["role"] == "visitor") {
-            header("Location:http://localhost/app/home/visitor/index.php");
-        } else if ($_SESSION["role"] == "bloger") {
-            header("Location:http://localhost/app/home/bloger/index.php");
-        }
-    }
-    ?>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -32,7 +32,7 @@
         },
     };
     </script>
-    <title>Register</title>
+    <title>Login</title>
 </head>
 
 <body>
@@ -41,7 +41,7 @@
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center">
                 <h1 class="text-xl md:text-2xl font-serif">
-                    BloogersHub</span>
+                    Bloogers<span class="text-primary">Hub</span>
                 </h1>
             </div>
             <div class="flex items-center space-x-4">
@@ -59,24 +59,17 @@
     </header>
 
     <main class="flex items-center justify-center w-full p-24">
-        <form action="../../actions/auth/register.php?status=<?php
-        echo $_GET['status'];
-        ?>" method="post" class="text-center flex flex-col shadow-md p-10 gap-10 w-[500px]">
+        <form action="../../actions/auth/login.php" method="post"
+            class="text-center flex flex-col shadow-md p-10 gap-10 w-[500px]">
             <div>
-                <legend class="font-serif font-bold text-2xl">
-                    Join BloogersHub As <?php
-                    echo $_GET['status'];
-                    ?>
-                </legend>
-                <span class="text-sm text-gray-500">Create an account to start</span>
+                <legend class="font-serif font-bold text-2xl">Welcome Back</legend>
+                <span class="text-sm text-gray-500">Sign in to access your account</span>
             </div>
             <input type="text" class="border-b outline-none font-serif text-md p-1" placeholder="Username"
-                name="username" /><input type="password" class="border-b outline-none font-serif text-md p-1"
-                placeholder="password" name="password" /><input type="password"
-                class="border-b outline-none font-serif text-md p-1" placeholder="confirm your password"
-                name="Cpassword" />
+                name="username" required /><input type="password" class="border-b outline-none font-serif text-md p-1"
+                placeholder="*********" name="password" required />
             <input type="submit" class="border p-2 hover:bg-black/80 hover:text-white cursor-pointer transition-all"
-                value="Register" />
+                value="Login" />
         </form>
     </main>
 </body>
