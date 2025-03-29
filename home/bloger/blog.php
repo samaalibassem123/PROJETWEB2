@@ -37,20 +37,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                fontFamily: {
-                    serif: ["Merriweather", "serif"],
-                    sans: ["Source Sans Pro", "sans-serif"],
-                },
-                colors: {
-                    primary: "#1a8917",
-                    dark: "#121212",
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ["Merriweather", "serif"],
+                        sans: ["Source Sans Pro", "sans-serif"],
+                    },
+                    colors: {
+                        primary: "#1a8917",
+                        dark: "#121212",
+                    },
                 },
             },
-        },
-    };
+        };
     </script>
     <title>Document</title>
 </head>
@@ -171,23 +171,23 @@
                 //CHECK IF COMMENT IS NOT PENDING SHOW HIM
                 if ($Comment["status"] != "pending" && $Comment["status"] != "rejected") {
                     ?>
-            <div class="flex flex-col gap-2 h-fit" id="comments">
-                <div class="flex flex-col border-b border-gray-200 w-full p-2">
-                    <div class="flex justify-between">
-                        <div class="flex gap-2 items-center">
-                            <img src="../../user.png" class="size-6" />
-                            <span
-                                class="text-sm font-serif text-black/80"><?php echo $Comment["comment_owner"]; ?></span>
-                            <span class="text-sm text-gray-500">At :<?php echo $Comment["date"]; ?></span>
+                    <div class="flex flex-col gap-2 h-fit" id="comments">
+                        <div class="flex flex-col border-b border-gray-200 w-full p-2">
+                            <div class="flex justify-between">
+                                <div class="flex gap-2 items-center">
+                                    <img src="../../user.png" class="size-6" />
+                                    <span
+                                        class="text-sm font-serif text-black/80"><?php echo $Comment["comment_owner"]; ?></span>
+                                    <span class="text-sm text-gray-500">At :<?php echo $Comment["date"]; ?></span>
 
+                                </div>
+                            </div>
+                            <p class="p-2 text-sm"><?php echo $Comment["contenu"]; ?></p>
                         </div>
                     </div>
-                    <p class="p-2 text-sm"><?php echo $Comment["contenu"]; ?></p>
-                </div>
-            </div>
-            </div>
+                    </div>
 
-            <?php
+                    <?php
                 }
             } ?>
         </section>
@@ -196,14 +196,14 @@
 </body>
 
 <script>
-function Showprompt() {
-    document.getElementById("prompt").style.display = "flex";
-}
+    function Showprompt() {
+        document.getElementById("prompt").style.display = "flex";
+    }
 
-function Closeprompt() {
-    window.location.reload();
-    document.getElementById("prompt").style.display = "none";
-}
+    function Closeprompt() {
+        window.location.reload();
+        document.getElementById("prompt").style.display = "none";
+    }
 </script>
 
 </html>

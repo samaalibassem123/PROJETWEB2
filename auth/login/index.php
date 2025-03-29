@@ -4,11 +4,11 @@
 session_start();
 //PROTECT THE ROUTER
 if (!empty($_SESSION["username"]) && !empty($_SESSION["role"])) {
-  if ($_SESSION["role"] == "visitor") {
-    header("Location:http://localhost/app/home/visitor/index.php");
-  } else if ($_SESSION["role"] == "bloger") {
-    header("Location:http://localhost/app/home/bloger/index.php");
-  }
+    if ($_SESSION["role"] == "visitor") {
+        header("Location:http://localhost/app/home/visitor/index.php");
+    } else if ($_SESSION["role"] == "bloger") {
+        header("Location:http://localhost/app/home/bloger/index.php");
+    }
 }
 ?>
 
